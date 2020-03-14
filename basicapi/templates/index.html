@@ -3,4 +3,58 @@
     <div class="container-fluid my-4">
         <h3>{{ app_name }}</h3>
     </div>
+    <div id="primary-vue">
+        [[ title ]]
+        <br><br>
+        <label for="first_name">First name:</label>
+        <input type="text" id="f_name">
+        <br><br>
+        <button class="btn btn-primary" @click="addUser()">asdf</button>
+        <br><br>
+        <div v-for="user in users">
+            First name: [[ user.name ]]
+            <br>
+        </div>
+
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        new Vue({
+            el: '#primary-vue',
+            delimiters: ['[[', ']]'],
+            data: {
+                title: 'Ozzie\'s api',
+                users: {{ users | safe }}
+            },
+            methods: {
+                addUser() {
+                    let vue_this = this;
+                    $.ajax({
+                        url: "{{ url_for('basicapi_bp.add_user', first_name='FIRST_NAME')}}".replace('FIRST_NAME', vue_this.first_name),
+                        method: 'post',
+                        dataType: 'json',
+                        success: (data) => {
+                            {#  todo  #}
+                        },
+                        error: () => {
+                            console.log('method returned error');
+                        }
+                    })
+                },
+                updateCurrentUsers() {
+
+                }
+            },
+            computed: {
+                email() {
+                    return $("#e_mail").val();
+                },
+                first_name() {
+                    return $("#f_name").val();
+                }
+            }
+        });
+    </script>
 {% endblock %}

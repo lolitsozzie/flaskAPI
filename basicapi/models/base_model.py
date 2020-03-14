@@ -13,4 +13,3 @@ class BaseModel(db.Model):
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.statement_timestamp())
     updated_at = db.Column(db.DateTime(timezone=True), server_default=func.statement_timestamp(),
                            onupdate=func.clock_timestamp())
-    
