@@ -111,7 +111,7 @@
         </form>
         <br><br>
         <div v-if="processing" class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-        <button v-else class="btn btn-primary" @click="addUser()">submit</button>
+        <button v-else style="background-color: limegreen; -webkit-text-fill-color: black" class="btn btn-light" @click="addUser()">let me know you stopped by</button>
         <br><br>
         <div v-for="user in users">
             First name: [[ user.name ]]
