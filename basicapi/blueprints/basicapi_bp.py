@@ -32,12 +32,12 @@ def add_user(first_name):
     Adds a user based on the vue.js input from the ajax request
     :param first_name: first name of the user
     :param email: email of the user
-    :return:
+    :return: list of all users
     """
-    all_users = User.get_all()
     u = User(
         first_name=first_name
     )
     db.session.add(u)
     db.session.commit()
-    return '200';
+    users = [{'name': user.first_name} for user in User.get_all()]
+    return json.dumps(users), 200, {'ContentType': 'application/json'};

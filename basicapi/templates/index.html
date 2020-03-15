@@ -7,9 +7,12 @@
         [[ title ]]
         <br><br>
         <label for="first_name">First name:</label>
-        <input type="text" id="f_name">
+        <form id="first_name_form">
+            <input type="text" id="f_name" name="f_name">
+        </form>
         <br><br>
-        <button class="btn btn-primary" @click="addUser()">asdf</button>
+        <span v-if="processing"></span>
+        <button v-else class="btn btn-primary" @click="addUser()">asdf</button>
         <br><br>
         <div v-for="user in users">
             First name: [[ user.name ]]
@@ -26,20 +29,26 @@
             delimiters: ['[[', ']]'],
             data: {
                 title: 'Ozzie\'s api',
+                processing: false,
                 users: {{ users | safe }}
             },
             methods: {
                 addUser() {
+                    this.processing = true;
                     let vue_this = this;
                     $.ajax({
-                        url: "{{ url_for('basicapi_bp.add_user', first_name='FIRST_NAME')}}".replace('FIRST_NAME', vue_this.first_name),
+                        url: "{{ url_for('basicapi_bp.add_user', first_name='FIRST_NAME')}}".replace('FIRST_NAME', $("#f_name").val()),
                         method: 'post',
                         dataType: 'json',
                         success: (data) => {
-                            {#  todo  #}
+                            document.getElementById("first_name_form").reset();
+                            vue_this.users = data;
+                            vue_this.processing = false;
                         },
                         error: () => {
+                            document.getElementById("first_name_form").reset();
                             console.log('method returned error');
+                            vue_this.processing = false;
                         }
                     })
                 },
@@ -48,12 +57,6 @@
                 }
             },
             computed: {
-                email() {
-                    return $("#e_mail").val();
-                },
-                first_name() {
-                    return $("#f_name").val();
-                }
             }
         });
     </script>
