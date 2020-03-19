@@ -36,12 +36,16 @@ def dataFunction():
         all_data = json.dumps([x.serialize for x in Data.get_all()])
         return all_data
     elif request.method == 'POST':
-        d = Data(
-           value=request.args.get('value')
-        )
-        db.session.add(d)
-        db.session.commit()
-        return '201'
+        try:
+            d = Data(
+               value=int(request.args.get('value'))
+            )
+            db.session.add(d)
+            db.session.commit()
+            return '201'
+        except:
+            return '404'
+
 
 
 @basicapi_bp.route('/ezApi/', methods=['GET', 'PUT', 'DELETE'])
