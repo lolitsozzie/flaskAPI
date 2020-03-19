@@ -1,5 +1,4 @@
-from flask import Blueprint, render_template, jsonify, request, json
-import string, random
+from flask import Blueprint, render_template, request, json
 from ..extensions import db
 from basicapi.models.user import User
 from basicapi.models.data import Data
@@ -33,8 +32,8 @@ def add_user(first_name):
 @basicapi_bp.route('/ezApi', methods=['GET', 'POST'])
 def dataFunction():
     if request.method == 'GET':
-        all_data = json.dumps([x.serialize for x in Data.get_all()])
-        return all_data
+        all_data = [x.value for x in Data.get_all()]
+        return json.dumps(all_data), 200, {'ContentType': 'application/json'}
     elif request.method == 'POST':
         try:
             d = Data(
@@ -52,9 +51,12 @@ def dataFunction():
 def bookFunctionId(id):
     if request.method == 'GET':
         try:
-            matching_data = Data.get(int(id))
-            if matching_data:
+            all_data = [x.id for x in Data.get_all()]
+            if id in all_data:
+                matching_data = Data.get(int(id))
                 return matching_data.serialize
+            else:
+                return '404'
         except:
             return '404'
     elif request.method == 'DELETE':
