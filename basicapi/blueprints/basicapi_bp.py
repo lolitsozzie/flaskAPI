@@ -48,20 +48,23 @@ def dataFunction():
 
 
 
-@basicapi_bp.route('/ezApi/', methods=['GET', 'PUT', 'DELETE'])
+@basicapi_bp.route('/ezApi/<int:id>', methods=['GET', 'PUT', 'DELETE'])
 def bookFunctionId(id):
     if request.method == 'GET':
         try:
-            all_data = Data.get_all()
-            return 'todo'
+            matching_data = Data.get(int(id))
+            if matching_data:
+                return matching_data.serialize
         except:
             return '404'
-
-    elif request.method == 'PUT':
-        title = request.args.get('title', '')
-        author = request.args.get('author', '')
-        genre = request.args.get('genre', '')
-        return updateBook(id, title, author, genre)
-
     elif request.method == 'DELETE':
-        return deleteABook(id)
+        try:
+            matching_data = Data.get(int(id))
+            if matching_data:
+                db.session.delete(matching_data)
+                db.session.commit()
+                return 'Removed data id ' + str(id)
+            else:
+                return '304'
+        except:
+            return '304'
