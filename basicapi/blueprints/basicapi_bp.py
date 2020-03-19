@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, jsonify, request, json
 import string, random
 from ..extensions import db
 from basicapi.models.user import User
+from basicapi.models.data import Data
 
 basicapi_bp = Blueprint('basicapi_bp', __name__)
 
@@ -10,20 +11,6 @@ basicapi_bp = Blueprint('basicapi_bp', __name__)
 def index():
     users = [{'name': user.first_name} for user in User.get_all()]
     return render_template('index.html', app_name='basicAPI', users=json.dumps(users))
-
-
-@basicapi_bp.route('/password/<int:length>', methods=['GET'])
-def generate_pass(length):
-    letters_and_digits = string.ascii_letters + string.digits
-    to_return = ''.join(random.choice(letters_and_digits) for i in range(length))
-    return jsonify(to_return)
-
-
-@basicapi_bp.route('/password/special/<int:length>', methods=['GET'])
-def generate_special_pass(length):
-    letters_digits_specials = string.ascii_letters + string.digits + string.punctuation
-    to_return = ''.join(random.choice(letters_digits_specials) for i in range(length))
-    return jsonify(to_return)
 
 
 @basicapi_bp.route('/add/<first_name>', methods=['POST'])
@@ -41,3 +28,36 @@ def add_user(first_name):
     db.session.commit()
     users = [{'name': user.first_name} for user in User.get_all()]
     return json.dumps(users), 200, {'ContentType': 'application/json'};
+
+
+@basicapi_bp.route('/ezApi', methods=['GET', 'POST'])
+def dataFunction():
+    if request.method == 'GET':
+        all_data = json.dumps([x.serialize for x in Data.get_all()])
+        return all_data
+    elif request.method == 'POST':
+        d = Data(
+           value=request.args.get('value')
+        )
+        db.session.add(d)
+        db.session.commit()
+        return '201'
+
+
+@basicapi_bp.route('/ezApi/', methods=['GET', 'PUT', 'DELETE'])
+def bookFunctionId(id):
+    if request.method == 'GET':
+        try:
+            all_data = Data.get_all()
+            return 'todo'
+        except:
+            return '404'
+
+    elif request.method == 'PUT':
+        title = request.args.get('title', '')
+        author = request.args.get('author', '')
+        genre = request.args.get('genre', '')
+        return updateBook(id, title, author, genre)
+
+    elif request.method == 'DELETE':
+        return deleteABook(id)
