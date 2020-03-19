@@ -3,7 +3,7 @@ from .base_model import BaseModel
 
 
 class Data(BaseModel):
-    value = db.Column(db.Text, nullable=False)
+    value = db.Column(db.Integer, nullable=False)
 
     @classmethod
     def get_all(cls):
