@@ -37,7 +37,7 @@ def dataFunction():
     elif request.method == 'POST':
         try:
             all_data = Data.get_all()
-            if len(all_data) > 100:
+            if len(all_data) > 499:
                 db.session.delete(all_data[0])
             d = Data(
                value=int(request.args.get('value'))
