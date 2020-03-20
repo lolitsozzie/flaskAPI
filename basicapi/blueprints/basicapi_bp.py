@@ -36,6 +36,9 @@ def dataFunction():
         return json.dumps(all_data), 200, {'ContentType': 'application/json'}
     elif request.method == 'POST':
         try:
+            all_data = Data.get_all()
+            if len(all_data) > 100:
+                db.session.delete(all_data[0])
             d = Data(
                value=int(request.args.get('value'))
             )
