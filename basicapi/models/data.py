@@ -19,5 +19,5 @@ class Data(BaseModel):
         return {
             'id': self.id,
             'value': self.value,
-            'time': datetime.datetime.strftime(self.created_at, '%I:%M%p')
+            'time': self.created_at
         }
