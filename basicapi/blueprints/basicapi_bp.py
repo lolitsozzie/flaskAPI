@@ -39,7 +39,7 @@ def dataFunction():
     elif request.method == 'POST':
         try:
             all_data = Data.get_all()
-            if len(all_data) > 99:
+            if len(all_data) > 287:
                 all_data.sort(key=lambda x: x.id, reverse=False)
                 db.session.delete(all_data[0])
             d = Data(
