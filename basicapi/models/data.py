@@ -1,3 +1,5 @@
+import datetime
+
 from ..extensions import db
 from .base_model import BaseModel
 
@@ -15,6 +17,7 @@ class Data(BaseModel):
     @property
     def serialize(self):
         return {
+            'id': self.id,
             'value': self.value,
-            'id': self.id
+            'time': datetime.datetime.strftime(self.created_at, '%I:%M%p')
         }

@@ -34,7 +34,7 @@ def dataFunction():
     if request.method == 'GET':
         all_data = [x for x in Data.get_all()]
         all_data.sort(key=lambda x: x.id, reverse=False)
-        all_data = [x.value for x in all_data]
+        all_data = [x.serialize for x in all_data]
         return json.dumps(all_data), 200, {'ContentType': 'application/json'}
     elif request.method == 'POST':
         try:
