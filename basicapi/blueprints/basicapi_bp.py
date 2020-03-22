@@ -43,7 +43,7 @@ def dataFunction():
                 all_data.sort(key=lambda x: x.id, reverse=False)
                 db.session.delete(all_data[0])
             d = Data(
-               value=int(request.args.get('value'))
+               value=float(request.args.get('value'))
             )
             db.session.add(d)
             db.session.commit()
