@@ -5,7 +5,7 @@ from .base_model import BaseModel
 
 
 class Data(BaseModel):
-    value = db.Column(db.Integer, nullable=False)
+    value = db.Column(db.Float, nullable=False)
 
     @classmethod
     def get_all(cls):
