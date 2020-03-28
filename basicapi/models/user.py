@@ -4,11 +4,12 @@ from .base_model import BaseModel
 
 class User(BaseModel):
     first_name = db.Column(db.Text, nullable=False)
+    tasks = db.relationship('Task', backref=db.backref('User'))
 
-    @classmethod
-    def get_all(cls):
-        """
-        Get all product variations for a practice
-        :return: (list) of ProductVariation objects
-        """
-        return [c for c in cls.query.all()]
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'first_name': self.first_name,
+            'tasks': [x.serialize for x in self.tasks]
+        }

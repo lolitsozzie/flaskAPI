@@ -15,6 +15,14 @@ class BaseModel(db.Model):
                            onupdate=func.clock_timestamp())
 
     @classmethod
+    def get_all(cls):
+        """
+        Get all product variations for a practice
+        :return: (list) of ProductVariation objects
+        """
+        return [c for c in cls.query.all()]
+
+    @classmethod
     def get(cls, object_id):
         """
         Get an object by id.

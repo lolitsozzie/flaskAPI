@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, json
 from ..extensions import db
 from basicapi.models.user import User
 from basicapi.models.data import Data
+from basicapi.models.task import Task
 
 basicapi_bp = Blueprint('basicapi_bp', __name__)
 
@@ -72,6 +73,53 @@ def bookFunctionId(id):
                 db.session.delete(matching_data)
                 db.session.commit()
                 return 'Removed data id ' + str(id)
+            else:
+                return '304'
+        except:
+            return '304'
+
+
+@basicapi_bp.route('/ezApi/users', methods=['GET', 'POST'])
+def users_basic():
+    if request.method == 'GET':
+        all_data = [x for x in User.get_all()]
+        all_data.sort(key=lambda x: x.id, reverse=False)
+        all_data = [x.serialize for x in all_data]
+        return json.dumps(all_data), 200, {'ContentType': 'application/json'}
+    elif request.method == 'POST':
+        try:
+            all_data = [x.first_name for x in User.get_all()]
+            if request.args.get('first_name') in all_data:
+                return '304'
+            u = User(
+                first_name=request.args.get('first_name')
+            )
+            db.session.add(u)
+            db.session.commit()
+            return '201'
+        except:
+            return '404'
+
+
+@basicapi_bp.route('/ezApi/users/<int:id>', methods=['GET', 'DELETE'])
+def user_by_id(id):
+    if request.method == 'GET':
+        try:
+            all_data = [x.id for x in User.get_all()]
+            if id in all_data:
+                matching_data = User.get(int(id))
+                return matching_data.serialize
+            else:
+                return '404'
+        except:
+            return '404'
+    elif request.method == 'DELETE':
+        try:
+            matching_data = User.get(int(id))
+            if matching_data:
+                db.session.delete(matching_data)
+                db.session.commit()
+                return 'Removed user id ' + str(id)
             else:
                 return '304'
         except:
