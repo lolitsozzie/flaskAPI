@@ -26,7 +26,7 @@ jinja2-time==0.2.0
 Mako==1.1.2
 MarkupSafe==1.1.1
 marshmallow==3.5.1
-pipenv==2018.11.26
+pipenv==2022.1.8
 poyo==0.5.0
 psycopg2-binary==2.8.4
 pycparser==2.20
